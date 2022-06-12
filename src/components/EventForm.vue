@@ -30,7 +30,12 @@ const addEvent = () => {
     description: eventDescription.value,
   }
   eventStore.addEvent(event)
+  clearForm()
 }
 
+const clearForm = () => {
+  eventDate.value = dayjs().format('YYYY-MM-DD')
+  eventDescription.value = ''
+}
 
 </script>
