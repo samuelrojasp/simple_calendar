@@ -1,5 +1,5 @@
 <template>
-  <div class="clalendar-current-month">{{ selectedMonth }}</div>
+  <div class="calendar-current-month">{{ selectedMonth }}</div>
 </template>
 
 <script setup>
@@ -12,5 +12,13 @@ const props = defineProps({
   },
 })
 
-const selectedMonth = computed(() => props.selectedDate.format('MMMM'))
+const selectedMonth = computed(() => props.selectedDate.format('MMMM YYYY'))
 </script>
+
+
+<style scoped>
+.calendar-current-month {
+  font-size: 24px;
+  font-weight: bold;
+}
+</style>

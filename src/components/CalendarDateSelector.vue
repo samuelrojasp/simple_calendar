@@ -1,32 +1,56 @@
 <template>
-  <div class="calendar">
-    <div class="calendar__header">
-      <div class="calendar__header__left">
-        <button class="calendar__header__left__button" @click="changeMonth('prev')">&lt;</button>
-      </div>
-      <div class="calendar__header__center">
-        <h2>{{ monthToShow }} {{ year }}</h2>
-      </div>
-      <div class="calendar__header__right">
-        <button class="calendar__header__right__button" @click="changeMonth('next')">&gt;</button>
-      </div>
-    </div>
+  <div class="calendar-date-selector">
+    <span @click="selectPrevious">&lt;</span>
+    <span @click="selectCurrent">Today</span>
+    <span @click="selectNext">&gt;</span>
   </div>
 </template>
 
 <script setup>
-import { defineEmits, computed, ref } from 'vue';
+import { toRefs } from 'vue'
+import dayjs from 'dayjs'
 
-const year = ref(new Date().getFullYear())
-const month = ref(new Date().getMonth())
-const monthToShow = computed(() => month.value + 1)
+const props = defineProps({
+  currentDate: {
+    type: String,
+    required: true
+  },
+  selectedDate: {
+    type: Object,
+    required: true
+  }
+})
 
-const emit = defineEmits(['changeMonth'])
+const { currentDate, selectedDate } = toRefs(props)
 
-const changeMonth = (action) => {
-  const date = action === `prev` ? new Date(year.value, month.value - 1, 1) : new Date(year.value, month.value + 1, 1)
-  year.value = date.getFullYear()
-  month.value = date.getMonth()
-  emit('changeMonth', { year: year.value, month: month.value })
+const emits = defineEmits(['dateSelected'])
+
+const selectPrevious = () => {
+  let newSelectedDate = dayjs(selectedDate.value).subtract(1, 'month')
+  emits('dateSelected', newSelectedDate)
+}
+
+const selectCurrent = () => {
+  let newSelectedDate = dayjs(currentDate.value)
+  emits('dateSelected', newSelectedDate)
+}
+
+const selectNext = () => {
+  let newSelectedDate = dayjs(selectedDate.value).add(1, 'month')
+  emits('dateSelected', newSelectedDate)
 }
 </script>
+
+<style scoped>
+.calendar-date-selector {
+  display: flex;
+  justify-content: space-between;
+  width: 80px;
+  color: var(--grey-800)
+}
+
+.calendar-date-selector > * {
+  cursor: pointer;
+  user-select: none;
+}
+</style>
