@@ -43,11 +43,12 @@ const days = computed(() => [
   ...currentMonthDays.value,
   ...nextMonthDays.value,
 ])
+
 const today = computed(() => dayjs().format('YYYY-MM-DD'))
 const month = computed(() => Number(selectedDate.value.format('M')))
 const year = computed(() => Number(selectedDate.value.format('YYYY')))
 const numberOfDaysInMonth = computed(() => dayjs(selectedDate.value).daysInMonth())
-const currentMonthDays = computed(() => [...Array(numberOfDaysInMonth)].map((day, index) => {
+const currentMonthDays = computed(() => [...Array(numberOfDaysInMonth.value)].map((day, index) => {
   return {
     date: dayjs(`${year.value}-${month.value}-${index + 1}`).format('YYYY-MM-DD'),
     isCurrentMonth: true,
@@ -84,3 +85,38 @@ const selectDate = (newSelectedDate) => {
   selectedDate.value = newSelectedDate
 }
 </script>
+
+<style scoped>
+.calendar {
+  position: relative;
+  background-color: var(--grey-200);
+  border: solid 1px var(--grey-300);
+}
+
+.day-of-week {
+  color: var(--grey-800);
+  font-size: 18px;
+  background-color: #fff;
+  padding-bottom: 5px;
+  padding-top: 10px;
+}
+
+.day-of-week,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day-of-week > * {
+  text-align: right;
+  padding-right: 5px;
+}
+
+.calendar-grid {
+  height: 100%;
+  position: relative;
+  grid-column-gap: var(--grid-gap);
+  grid-row-gap: var(--grid-gap);
+  border-top: solid 1px var(--grey-200);
+}
+</style>
