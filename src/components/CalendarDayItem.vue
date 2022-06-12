@@ -2,9 +2,9 @@
   <li
     class="calendar-day-item"
     :class="{
-        'calendar-day--not-current-month': !day.isCurrentMonth,
-        'calendar-day--today': isToday
-      }"
+      'calendar-day--not-current-month': !day.isCurrentMonth,
+      'calendar-day--today': isToday
+    }"
   >
     <span>{{ label }}</span>
     <ul>

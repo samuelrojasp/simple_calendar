@@ -19,6 +19,7 @@
 import { ref } from 'vue'
 import { useEventStore } from '../stores/events'
 import dayjs from 'dayjs'
+import { v4 as uuidv4 } from 'uuid'
 
 const eventDate = ref(dayjs().format('YYYY-MM-DD'))
 const eventDescription = ref('')
@@ -26,6 +27,7 @@ const eventStore = useEventStore()
 
 const addEvent = () => {
   const event = {
+    id: uuidv4(),
     date: eventDate.value,
     description: eventDescription.value,
   }
