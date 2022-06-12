@@ -22,6 +22,12 @@
         :is-today="day.date === today"
       />
     </ol>
+    <div class="event-form">
+      <EventForm
+        :selected-date="selectedDate"
+        @eventAdded="addEvent"
+      />
+    </div>
   </div>
 </template>
 <script setup>
@@ -33,6 +39,7 @@ import CalendarDayItem from './CalendarDayItem.vue'
 import CalendarCurrentMonth from './CalendarCurrentMonth.vue'
 import CalendarDateSelector from './CalendarDateSelector.vue'
 import CalendarWeekdays from './CalendarWeekdays.vue'
+import EventForm from './EventForm.vue'
 
 dayjs.extend(weekday)
 dayjs.extend(weekOfYear)

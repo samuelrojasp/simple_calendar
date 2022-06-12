@@ -7,11 +7,15 @@
       }"
   >
     <span>{{ label }}</span>
+    <ul>
+      <li v-for="event in events" :key="event.description">{{ event.description }}</li>
+    </ul>
   </li>
 </template>
 
 <script setup>
 import { computed, toRefs } from 'vue'
+import { useEventStore } from '../stores/events'
 import dayjs from 'dayjs'
 
 const props = defineProps({
@@ -30,8 +34,14 @@ const props = defineProps({
 })
 
 const { day, isCurrentMonth, isToday } = toRefs(props)
+const eventStore = useEventStore()
 
 const label = computed(() => dayjs(day.value.date).format("D"))
+const events = computed(() => {
+  return eventStore.events.filter(event => {
+    return dayjs(event.date).format("YYYY-MM-DD") === day.value.date
+  })
+})
 
 </script>
 
