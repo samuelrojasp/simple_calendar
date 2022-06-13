@@ -1,9 +1,9 @@
 <template>
   <div class="calendar">
-    <div class="calendar__header">
+    <div class="calendar-header">
       <CalendarCurrentMonth
         :selected-date="selectedDate"
-        class-name="calendar__header__current-month"
+        class="calendar__header__current-month"
       />
       <CalendarDateSelector
         :current-date="today"
@@ -22,11 +22,18 @@
         :is-today="day.date === today"
       />
     </ol>
-    <div class="event-form">
-      <EventForm
-        @eventAdded="addEvent"
-      />
+
+    <div class="new-event">
+      <button @click="isModalOpen = true">New Event</button>
     </div>
+
+    <transition name="modal">
+      <modal v-if="isModalOpen" @close="isModalOpen = false">
+        <template v-slot:form>
+          <EventForm @close="isModalOpen = false" />
+        </template>
+      </modal>
+    </transition>
   </div>
 </template>
 <script setup>
@@ -39,6 +46,7 @@ import CalendarCurrentMonth from './CalendarCurrentMonth.vue'
 import CalendarDateSelector from './CalendarDateSelector.vue'
 import CalendarWeekdays from './CalendarWeekdays.vue'
 import EventForm from './EventForm.vue'
+import modal from './ModalWindow.vue'
 
 dayjs.extend(weekday)
 dayjs.extend(weekOfYear)
@@ -50,6 +58,8 @@ const days = computed(() => [
   ...nextMonthDays.value,
 ])
 
+
+const isModalOpen = ref(false)
 const today = computed(() => dayjs().format('YYYY-MM-DD'))
 const month = computed(() => Number(selectedDate.value.format('M')))
 const year = computed(() => Number(selectedDate.value.format('YYYY')))
@@ -60,19 +70,37 @@ const currentMonthDays = computed(() => [...Array(numberOfDaysInMonth.value)].ma
     isCurrentMonth: true,
   }
 }))
+
 const previousMonthDays = computed(() => {
-  const firstDaysOfTheMOnthWeekday = getWeekday(currentMonthDays.value[0].date)
-  const previousMonth = dayjs(`${year.value}-${month.value - 1}-01`).subtract(1, 'month')
-  const visibleNumberOfDaysFromPreviousMonth = firstDaysOfTheMOnthWeekday ? firstDaysOfTheMOnthWeekday - 1 : 6
-  const previousMonthLastMondayDayOfMonth = dayjs(currentMonthDays.value[0].date).subtract(1, 'day').date()
+  const firstDaysOfTheMonthWeekday = getWeekday(
+    currentMonthDays.value[0].date
+  )
+
+  const previousMonth = dayjs(`${year.value}-${month.value}-01`).subtract(
+    1,
+    'month'
+  )
+
+  const visibleNumberOfDaysFromPreviousMonth = firstDaysOfTheMonthWeekday
+    ? firstDaysOfTheMonthWeekday - 1
+    : 6
+
+  const previousMonthLastMondayDayOfMonth = dayjs(
+    currentMonthDays.value[0].date
+  )
+    .subtract(visibleNumberOfDaysFromPreviousMonth, 'day')
+    .date()
 
   return [...Array(visibleNumberOfDaysFromPreviousMonth)].map((day, index) => {
     return {
-      date: dayjs(`${previousMonth.year()}-${previousMonth.month() + 1}-${previousMonthLastMondayDayOfMonth + index}`).format('YYYY-MM-DD'),
+      date: dayjs(
+        `${previousMonth.year()}-${previousMonth.month() + 1}-${previousMonthLastMondayDayOfMonth + index}`
+      ).format('YYYY-MM-DD'),
       isCurrentMonth: false,
     }
   })
 })
+
 const nextMonthDays = computed(() => {
   const lastDayOfTheMonthWeekday = getWeekday(`${year.value}-${month.value}-${currentMonthDays.value.length}`)
   const nextMonth = dayjs(`${year.value}-${month.value}-01`).add(1, 'month')
@@ -124,5 +152,24 @@ const selectDate = (newSelectedDate) => {
   grid-column-gap: var(--grid-gap);
   grid-row-gap: var(--grid-gap);
   border-top: solid 1px var(--grey-200);
+}
+
+.new-event {
+  background: transparent;
+  padding: 10px;
+  text-align: left;
+}
+
+.new-event button {
+  background: rgba(255,255,255,0.7);
+  padding: 5px;
+  border: 1px solid black;
+  color: var(--grey-800);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.new-event button:active {
+  background: rgba(255,255,255,0.5);
 }
 </style>

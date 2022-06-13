@@ -1,5 +1,7 @@
 <template>
-  <CalendarView />
+  <div id="app">
+    <CalendarView />
+  </div>
 </template>
 
 <script setup>
@@ -34,10 +36,10 @@ li {
   list-style: none;
 }
 
-.calendar-month-header {
+.calendar-header {
   display: flex;
   justify-content: space-between;
   background-color: #fff;
-  padding: 10px;
+  padding: 15px;
 }
 </style>

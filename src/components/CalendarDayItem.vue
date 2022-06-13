@@ -7,9 +7,7 @@
     }"
   >
     <span>{{ label }}</span>
-    <ul>
-      <li v-for="event in events" :key="event.description">{{ event.description }}</li>
-    </ul>
+    <p class="event" v-for="event in events" :key="event.description">{{ event.description }}</p>
   </li>
 </template>
 
@@ -56,11 +54,6 @@ const events = computed(() => {
 }
 
 .calendar-day-item > span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  right: 2px;
   width: var(--day-label-size);
   height: var(--day-label-size);
 }
@@ -70,13 +63,22 @@ const events = computed(() => {
   color: var(--grey-300);
 }
 
-.calendar-day--today {
-  padding-top: 4px;
+.calendar-day--today > span{
+  padding: 3px 4px;
 }
 
 .calendar-day--today > span {
   color: #fff;
   border-radius: 9999px;
   background-color: var(--grey-800);
+}
+
+.event {
+  text-align: left;
+  margin: 5px 0;
+  padding: 2px 6px;
+  font-size: 12px;
+  background-color: var(--grey-200);
+  border-radius: 9999px;
 }
 </style>

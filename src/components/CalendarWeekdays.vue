@@ -19,7 +19,7 @@ const weekdays = computed(() => WEEKDAYS);
 }
 
 .day-of-week > * {
-  text-align: right;
+  text-align: center;
   padding-right: 5px;
 }
 </style>

@@ -1,15 +1,8 @@
 <template>
   <div class="event-form">
-    <h2>New event</h2>
     <form @submit.prevent="addEvent">
-      <div class="form-group">
-        <label for="event-title">Description</label>
-        <input type="text" class="form-control" v-model="eventDescription" placeholder="add the description here" required>
-      </div>
-      <div class="form-group">
-        <label for="event-date">Date</label>
-        <input type="date" class="form-control" id="event-date" v-model="eventDate" required>
-      </div>
+      <input type="text" class="form-control" v-model="eventDescription" placeholder="Add the event description here" required>
+      <input type="date" class="form-control" id="event-date" v-model="eventDate" required>
       <button>Add Event</button>
     </form>
   </div>
@@ -24,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid'
 const eventDate = ref(dayjs().format('YYYY-MM-DD'))
 const eventDescription = ref('')
 const eventStore = useEventStore()
+const emits = defineEmits(['close'])
 
 const addEvent = () => {
   const event = {
@@ -33,6 +27,7 @@ const addEvent = () => {
   }
   eventStore.addEvent(event)
   clearForm()
+  emits('close')
 }
 
 const clearForm = () => {
@@ -41,3 +36,29 @@ const clearForm = () => {
 }
 
 </script>
+
+<style scoped>
+form {
+  width: 100%;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #999;
+  font-weight: bold;
+  box-sizing:border-box;
+}
+
+input::placeholder {
+  color: #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+</style>
