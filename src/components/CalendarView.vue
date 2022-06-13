@@ -24,7 +24,7 @@
     </ol>
     <div class="event-form">
       <EventForm
-        :selected-date="selectedDate"
+        :event-date="eventDate"
         @eventAdded="addEvent"
       />
     </div>
